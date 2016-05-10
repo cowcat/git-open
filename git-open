@@ -81,6 +81,8 @@ else
   if [ -n "$gitlab_domain" ]; then
     if grep -q "$gitlab_domain" <<<$giturl; then
       giturl=${giturl/git\@${gitlab_domain}:/https://${gitlab_domain}/}
+      # handle SSH protocol (links like ssh://git@github.com/user/repo)
+      giturl=${giturl/#ssh\:\/\/git\@${gitlab_domain}\//https://${gitlab_domain}/}
       providerUrlDifference=tree
     fi
     # hosted gitlab
@@ -109,4 +111,3 @@ esac
 # open it in a browser
 $open "$giturl" &> /dev/null
 exit 0
-
